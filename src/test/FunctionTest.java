@@ -272,40 +272,79 @@ public class FunctionTest {
     @Test
     public void testRun() throws CustomException {
         GrammaticalAnalysis grammaticalAnalysis = new GrammaticalAnalysis();
-        String demo = "// this is zhu shi \n" +
-                "void func(int a,int b){\n" +
+        String demo1 = "#include <iostream>\n" +
+                "\n" +
+                "// this is zhu shi \n" +
+                "int func(int a,int b){\n" +
                 "\tint c;\n" +
                 "\tc = a+b;\n" +
                 "\treturn c; \n" +
                 "}\n" +
-                "int a;\n" +
-                "int b;\n" +
-                "a = 2;\n" +
-                "b = 6;\n" +
                 "\n" +
-                "if(a < b){\n" +
-                "\ta = a + 2;\n" +
-                "}else{\n" +
-                "\tb = b + 2;\n" +
+                "int func2(int a){\n" +
+                "\treturn a; \n" +
                 "}\n" +
-                "while(a>0){\n" +
-                "\ta=a-1;\n" +
-                "}\n";
-        String demo2 = "// this is zhu shi \n" +
-                "int a;\n" +
-                "int b;\n" +
-                "a = 2;\n" +
-                "b = 6;\n" +
                 "\n" +
-                "if(a < b){\n" +
-                "\ta = a + 2;\n" +
-                "}else{\n" +
-                "\tb = b + 2;\n" +
-                "}\n" +
-                "while(a>0){\n" +
-                "\ta=a-1;\n" +
+                "int main(){\n" +
+                "\t// this is zhu shi \n" +
+                "\tint a;\n" +
+                "\tint b;\n" +
+                "\ta = 2;\n" +
+                "\tb = 6;\n" +
+                "\t\n" +
+                "\tif(a < b){\n" +
+                "\t\ta = a + 2;\n" +
+                "\t}else{\n" +
+                "\t\tb = b + 2;\n" +
+                "\t}\n" +
+                "\twhile(a>0){\n" +
+                "\t\ta=a-1;\n" +
+                "\t}\t\n" +
                 "}";
-        grammaticalAnalysis.run(demo2);
+        String demo2 = "int main(){\n" +
+                "\t// this is zhu shi \n" +
+                "\tint a;\n" +
+                "\tint b;\n" +
+                "\ta = 2;\n" +
+                "\tb = 6;\n" +
+                "\t\n" +
+                "\tif(a < b){\n" +
+                "\t\ta = a + 2;\n" +
+                "\t}else{\n" +
+                "\t\tb = b + 2;\n" +
+                "\t}\n" +
+                "\twhile(a>0){\n" +
+                "\t\ta=a-1;\n" +
+                "\t}\t\n" +
+                "}";
+        String demo3 = "// this is zhu shi \n" +
+                "int func(int a,int b){\n" +
+                "\tint c;\n" +
+                "\tc = a+b;\n" +
+                "\treturn c; \n" +
+                "}\n" +
+                "\n" +
+                "int func2(int a){\n" +
+                "\treturn a; \n" +
+                "}\n" +
+                "\n" +
+                "int main(){\n" +
+                "\t// this is zhu shi \n" +
+                "\tint a;\n" +
+                "\tint b;\n" +
+                "\ta = 2;\n" +
+                "\tb = 6;\n" +
+                "\t\n" +
+                "\tif(a < b){\n" +
+                "\t\ta = a + 2;\n" +
+                "\t}else{\n" +
+                "\t\tb = b + 2;\n" +
+                "\t}\n" +
+                "\twhile(a>0){\n" +
+                "\t\ta=a-1;\n" +
+                "\t}\t\n" +
+                "}";
+        grammaticalAnalysis.run(demo1);
     }
 
     @Test

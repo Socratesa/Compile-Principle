@@ -183,7 +183,7 @@ public class LexicalAnalysis {
 
     //打印token序列
     private void PrintTokens(){
-        System.out.println("tokens序列如下：");
+        System.out.println("tokens序列:----------");
         for (Word token : this.tokens) {
             System.out.println(token);
         }
@@ -245,6 +245,7 @@ public class LexicalAnalysis {
     }
     public void scan(String input) throws CustomException {
         char[] str = input.toCharArray();
+        System.out.println("输入程序:----------");
         System.out.println(str);
         //为简便，我们对头文件声明、注释不做处理
         //直接跳过头文件  此处深究其实是有bug的
@@ -292,9 +293,9 @@ public class LexicalAnalysis {
                 throw new CustomException(str[peek]+"不在C语言文法内");
             }
         }
-        System.out.println("词法分析结束");
-        System.out.println("line = " + line);
         PrintTokens();
+        System.out.println("词法分析结束----------");
+        System.out.println("程序: line = " + line);
     }
 
     public static void main(String[] args) throws CustomException {

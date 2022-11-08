@@ -66,37 +66,6 @@ public class GrammaticalAnalysis {
         calcEmptyV();
     }
 */
-
-    //文法初始化 真正的文法
-    public GrammaticalAnalysis(){
-        S = "P'";
-        rules = new HashMap<>();
-        rules.put("P'", List.of("P"));
-        //rules.put("P",List.of("B D S"));
-        rules.put("P",List.of("D S"));
-        rules.put("D",List.of("L id ; D",""));
-        rules.put("L",List.of("int","float"));
-        //rules.put("S",List.of("id = E","if ( C ) { S }","if ( C ) { S } else { S }","while ( C ) { S }","S ; S"));
-        //修正
-        rules.put("S",List.of("id = E ;","if ( C ) { S }","if ( C ) { S } else { S }","while ( C ) { S }","S S"));
-        rules.put("C",List.of("E > E","E < E","E == E"));
-        rules.put("E",List.of("E + T","E - T","T"));
-        rules.put("T",List.of("F","T / F","T * F"));
-        rules.put("F", List.of("( E )","id","num"));
-        //添加函数定义文法
-        //我要开始了
-        //rules.put("B",List.of("R id ( L id , L id ) { S return E ; }",""));
-        //rules.put("R",List.of("void","L"));
-        //V = List.of("P'","P","D","S","L","C","E","T","F","R");
-        //T = List.of("void","return","int","float","id","num","(",")",";","if","else","while","{","}","*","/","+","-","=","<",">","==");
-        V = List.of("P'","P","D","S","L","C","E","T","F");
-        T = List.of("int","float","id","num","(",")",";","if","else","while","{","}","*","/","+","-","=","<",">","==");
-        VT = new ArrayList<>();
-        VT.addAll(V);
-        VT.addAll(T);
-        calcEmptyV();
-    }
-
 /*
     //测试action、goto的文法
     public GrammaticalAnalysis(){
@@ -115,6 +84,38 @@ public class GrammaticalAnalysis {
         calcEmptyV();
     }
 */
+
+    //文法初始化 真正的文法
+    public GrammaticalAnalysis(){
+        S = "P'";
+        rules = new HashMap<>();
+        rules.put("P'", List.of("P"));
+        /*
+        //未添加函数前文法
+        //rules.put("P",List.of("D S"));
+         */
+        //函数本身 程序可以看成是函数的组合  必须规范输入 严格按照C语言标准
+        rules.put("P",List.of("","L id ( A ) { D S } P"));
+        //变量声明语句
+        rules.put("D",List.of("L id ; D",""));
+        rules.put("L",List.of("int","float"));
+        //逻辑句子  return 添加在S中
+        rules.put("S",List.of("","id = E ;","if ( C ) { S }","if ( C ) { S } else { S }","while ( C ) { S }","S S","return E ;"));
+        rules.put("C",List.of("E > E","E < E","E == E"));
+        rules.put("E",List.of("E + T","E - T","T"));
+        rules.put("T",List.of("F","T / F","T * F"));
+        rules.put("F", List.of("( E )","id","num"));
+        //参数列表
+        rules.put("A",List.of("","L id M"));
+        rules.put("M",List.of("",", L id M"));
+
+        V = List.of("A","M","P'","P","D","S","L","C","E","T","F");
+        T = List.of(",","return","int","float","id","num","(",")",";","if","else","while","{","}","*","/","+","-","=","<",">","==");
+        VT = new ArrayList<>();
+        VT.addAll(V);
+        VT.addAll(T);
+        calcEmptyV();
+    }
 
     private void calcEmptyV(){
         EmptyV = new ArrayList<>();
@@ -276,8 +277,6 @@ public class GrammaticalAnalysis {
                 first.put(s,setData);
             }
         }
-
-        System.out.println("-----------");
         //开头为非终结符号
         while(true){
             //查看开始时所有First集合元素总数
@@ -528,39 +527,39 @@ public class GrammaticalAnalysis {
 
     //打印action、goto表格
     public void printChart(){
-        System.out.println("action---------");
+        System.out.println("action----------");
         int len1 = actionChart.length;
         int len2 = actionChart[0].length;
 
-        //System.out.print("  \t");
-        //for (String t : T) {
-        //    System.out.printf("%4s\t",t);
-        //}
-        //System.out.println("   #");
-        //for (int i = 0; i < len1; i++) {
-        //    System.out.printf("%2d\t",i);
-        //    for (int j = 0; j < len2; j++) {
-        //        if(actionChart[i][j] == null){
-        //            System.out.print("    \t");
-        //            continue;
-        //        }
-        //        System.out.printf("%4s\t",actionChart[i][j]);
-        //    }
-        //    System.out.println();
-        //}
-        System.out.print("  \t");
-        System.out.println("#");
+        System.out.print("    ");
+        for (String t : T) {
+            System.out.printf("%3s  ",t);
+        }
+        System.out.println("  #");
         for (int i = 0; i < len1; i++) {
-            System.out.printf("%2d\t",i);
-            if(actionChart[i][len2-1] == null){
-                System.out.println("    \t");
-                continue;
+            System.out.printf("%2d  ",i);
+            for (int j = 0; j < len2; j++) {
+                if(actionChart[i][j] == null){
+                    System.out.print("     ");
+                    continue;
+                }
+                System.out.printf("%3s  ",actionChart[i][j]);
             }
-            System.out.printf("%4s\t",actionChart[i][len2-1]);
             System.out.println();
         }
+        //System.out.print("  \t");
+        //System.out.println("#");
+        //for (int i = 0; i < len1; i++) {
+        //    System.out.printf("%2d\t",i);
+        //    if(actionChart[i][len2-1] == null){
+        //        System.out.println("    \t");
+        //        continue;
+        //    }
+        //    System.out.printf("%4s\t",actionChart[i][len2-1]);
+        //    System.out.println();
+        //}
 
-        System.out.println("goto---------");
+        System.out.println("goto----------");
         int glen1 = gotoChart.length;
         int glen2 = gotoChart[0].length;
         System.out.print("  \t");
@@ -612,14 +611,20 @@ public class GrammaticalAnalysis {
         calcFollow();
         calcFamily(List.of(new Item(S,0,0)));
         calcChart();
-        //System.out.println("first:---------------");
+        //System.out.println("first:----------");
         //System.out.println(first);
-        //System.out.println("follow:---------------");
+        //System.out.println("follow:----------");
         //System.out.println(follow);
-        System.out.println("family:---------------");
-        System.out.println(familyMap);
+        System.out.println("family:----------");
+        int familySize = familyMap.size();
+        for (int i = 0; i < familySize; i++) {
+            System.out.print(i + ":\t");
+            System.out.println(familyMap.get(i));
+        }
+        //System.out.println(familyMap);
         printChart();
 
+        System.out.println("SLR(1)----------");
         //此时，正式开始分析
         tokens.add(new Word(Tag.END,"#"));
         int len = tokens.size();
@@ -653,6 +658,7 @@ public class GrammaticalAnalysis {
                 if(flag){
                     continue;
                 }
+                System.out.println(cursor);
                 //抛异常
                 throw new CustomException("语法分析出错");
             }
