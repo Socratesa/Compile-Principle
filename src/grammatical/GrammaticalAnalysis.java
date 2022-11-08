@@ -84,6 +84,7 @@ public class GrammaticalAnalysis {
         rules.put("T",List.of("F","T / F","T * F"));
         rules.put("F", List.of("( E )","id","num"));
         //添加函数定义文法
+        //我要开始了
         //rules.put("B",List.of("R id ( L id , L id ) { S return E ; }",""));
         //rules.put("R",List.of("void","L"));
         //V = List.of("P'","P","D","S","L","C","E","T","F","R");
